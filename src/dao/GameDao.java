@@ -134,7 +134,7 @@ public class GameDao {
 			for(int y=0;y<19;y++)
 				if(gamemap[x][y]==true){
 					if(mode==1){
-						rect.drawone(g, 623, 32, x, y);
+						rect.drawone(g, 506, 32, x, y);
 					}else {
 						rect.drawone(g, 12, 32, x, y);
 					}

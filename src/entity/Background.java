@@ -7,8 +7,7 @@ import java.awt.*;
  * ±³¾°Í¼Æ¬
  */
 public class Background {
-	
-	private Image background = new ImageIcon("Graphics/background/yellow.jpg").getImage();
+	private Image background = new ImageIcon("Graphics/background/background2.png").getImage();
 	
 	public void draw(Graphics g){
 		g.drawImage(background, 0, 0, null);

@@ -1,6 +1,7 @@
 package UI;
 import java.awt.BorderLayout;
 import java.awt.EventQueue;
+import java.awt.Panel;
 
 import javax.swing.JFrame;
 import javax.swing.JOptionPane;
@@ -22,37 +23,19 @@ import MySocket.Server;
 public class MainFrame extends JFrame {
 
 	private String[] title={"俄罗斯方块单机版","俄罗斯方块联网对战版"};
-	private int[] size={515,875};
-	
-	/**
-	 * Launch the application.
-	 */
-	public static void main(String[] args) {
-		EventQueue.invokeLater(new Runnable() {
-			public void run() {
-				try {
-					MainFrame frame = new MainFrame();
-					frame.setVisible(true);
-				} catch (Exception e) {
-					e.printStackTrace();
-				}
-			}
-		});
-	}
+	private int[] size={415,760};
 
 	/**
 	 * Create the frame.
 	 */
 	public MainFrame() {
 		setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
-		
 		MusicPlayer.bgmPlay();
 		
-//		musicPlayer =new MusicPlayer("D:\\JAVA_project\\Project2_MyTetris\\src\\Main\\bgm1.wav");
 		//设置标题
 		this.setTitle("俄罗斯方块");
 		//设置窗体大小
-		this.setSize(514,480);
+		this.setSize(470,410);
 		//居中
 		this.setLocationRelativeTo(null);
 		//关闭事件
@@ -72,7 +55,7 @@ public class MainFrame extends JFrame {
 			this.addKeyListener(new KeyController(GameController.localController));
 			// 必须刷新一下界面才可以,
 			this.setTitle(title[0]);
-			this.setSize(size[0],460);
+			this.setSize(size[0],470);
 			GameController.localController.gameStart();
 			break;
 		case 1:
@@ -89,7 +72,7 @@ public class MainFrame extends JFrame {
 			this.addKeyListener(new KeyController(GameController.localController));
 			// 必须刷新一下界面才可以,
 			this.setTitle(title[1]);
-			this.setSize(size[1],460);
+			this.setSize(size[1],470);
 			GameController.localController.gameStart();
 			break;
 		case 2:
@@ -106,7 +89,7 @@ public class MainFrame extends JFrame {
 			this.addKeyListener(new KeyController(GameController.localController));
 			// 必须刷新一下界面才可以,
 			this.setTitle(title[1]);
-			this.setSize(size[1],460);
+			this.setSize(size[1],470);
 			GameController.localController.gameStart();
 			break;
 		}

@@ -7,7 +7,7 @@ import java.awt.*;
  * 表示每一个框框的位置和大小
  * 比如分数框、等级框、开始、暂停以及左边大块的游戏界面
  */
-public class MyLabel extends JLabel{
+public class GameWindow extends JLabel{
 
 	/**
 	 * serialVersionUID
@@ -15,7 +15,7 @@ public class MyLabel extends JLabel{
 	private static final long serialVersionUID = 3144082323765440087L;
 
 	private static final int SIZE = 7;
-	private static final Image WINDOW_IMG=new ImageIcon("Graphics/window/Window.png").getImage();
+	private static final Image WINDOW_IMG=new ImageIcon("Graphics/window/newWindow.png").getImage();
 	private static final int WINDOW_IMGW = WINDOW_IMG.getWidth(null);
 	private static final int WINDOW_IMGH = WINDOW_IMG.getHeight(null);
 	
@@ -27,7 +27,7 @@ public class MyLabel extends JLabel{
 	/**
 	 * 只有窗体没有内容的调用这个构造函数
 	 */
-	public MyLabel(int x, int y, int w, int h){
+	public GameWindow(int x, int y, int w, int h){
 		this.x=x-5;
 		this.y=y;
 		this.w=w;
@@ -36,7 +36,7 @@ public class MyLabel extends JLabel{
 	/**
 	 * 里面有字的比如分数、等级的，调用这个函数，因为要绘图
 	 */
-	public MyLabel(int x, int y, int w, int h,
+	public GameWindow(int x, int y, int w, int h,
 			String strUrl){
 		this(x,y,w,h);
         

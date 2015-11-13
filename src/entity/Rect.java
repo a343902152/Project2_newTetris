@@ -18,7 +18,7 @@ public class Rect {
 	
 	public int color;
 	
-	public Image RECT_IMG = new ImageIcon("Graphics/game/myrect.png").getImage();
+	public Image RECT_IMG = new ImageIcon("Graphics/game/newmyrect.png").getImage();
 		
 	public Rect(int color){
 		this.color = color;

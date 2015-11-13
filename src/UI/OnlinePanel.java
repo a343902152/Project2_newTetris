@@ -1,18 +1,22 @@
 package UI;
 
+import java.awt.Color;
 import java.awt.Font;
 import java.awt.Graphics;
+import java.awt.Image;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 
+import javax.swing.ImageIcon;
+import javax.swing.JLabel;
 import javax.swing.JPanel;
 
 import Controller.GameController;
 import Controller.MusicPlayer;
 import Controller.RemoteController;
-import entity.Background;
+import entity.GameWindow;
+import entity.LabelWithBG;
 import entity.MyButton;
-import entity.MyLabel;
 
 /**
  * 双人模式下的界面
@@ -24,24 +28,18 @@ public class OnlinePanel extends JPanel {
 	private GameController localController;
 	private RemoteController remoteController;
 	
-	private Background background=new Background();
+	private LabelWithBG newbackground;
 	
-	private MyLabel mainWindow;
-	private MyLabel nextWindow;
-	private MyLabel popedLineWindow;
-	private MyLabel levelWindow;
-	private MyLabel scoreWindow;
+	private GameWindow mainWindow;
+	private JLabel lblScroe,lblLevel;
 	
-	private MyLabel mainWindow2;
-	private MyLabel nextWindow2;
-	private MyLabel popedLineWindow2;
-	private MyLabel levelWindow2;
-	private MyLabel scoreWindow2;
+	private GameWindow mainWindow2;
+	private JLabel lblScroe2,lblLevel2;
 	
-	
+	private MyButton btnMusic;
 	private MyButton btnResume;
 	private MyButton btnPause;
-	private MyButton btnMusic;
+	private JLabel lblNewLabel;
 	
 	public void setLocalController(GameController gameController){
 		this.localController=gameController;
@@ -58,63 +56,89 @@ public class OnlinePanel extends JPanel {
 		int width=155;
 		int heiht=53;
 		
+		newbackground = new LabelWithBG(1000, 460,"Graphics/background/background.png");
+		
 		// -------------1------------------------------
-		mainWindow = new MyLabel(10, 10, 233, 405);
+		mainWindow = new GameWindow(10, 10, 233, 405);
 		mainWindow.setBounds(10, 10, 233, 405);
 		add(mainWindow);
 		
-		nextWindow = new MyLabel(272, 24, width, 98);
-		nextWindow.setBounds(272, 24, width, 98);
-		add(nextWindow);
+		JLabel lblLabei= new JLabel("\u97F3\u4E50");
+		lblLabei.setForeground(Color.LIGHT_GRAY);
+		lblLabei.setFont(new Font("黑体", Font.BOLD, 16));
+		lblLabei.setBounds(283, 37, 54, 15);
+		add(lblLabei);
 		
-		popedLineWindow = new MyLabel(272, 132, width, 53,
-				"Graphics/string/rmline.png");
-		popedLineWindow.setBounds(272, 132, width, 53);
-		popedLineWindow.setFont(new Font("Consolas",Font.BOLD,32));
-		add(popedLineWindow);
+		JLabel lblLabei_1 = new JLabel("\u7B49\u7EA7");
+		lblLabei_1.setForeground(Color.LIGHT_GRAY);
+		lblLabei_1.setFont(new Font("黑体", Font.BOLD, 16));
+		lblLabei_1.setBounds(283, 77, 54, 15);
+		add(lblLabei_1);
 		
-		levelWindow = new MyLabel(272, 195, width, 53,
-				"Graphics/string/level.png");
-		levelWindow.setBounds(272, 195, width, 53);
-		levelWindow.setFont(new Font("Consolas",Font.BOLD,32));
-		add(levelWindow);
+		lblLevel = new JLabel("0");
+		lblLevel.setFont(new Font("微软雅黑", Font.PLAIN, 20));
+		lblLevel.setForeground(Color.WHITE);
+		lblLevel.setBounds(293, 102, 54, 15);
+		add(lblLevel);
 		
-		scoreWindow = new MyLabel(272, 258, width, 53,
-				"Graphics/string/score.png");
-		scoreWindow.setBounds(272, 258, width, 53);
-		scoreWindow.setFont(new Font("Consolas",Font.BOLD,32));
-		add(scoreWindow);
+		JLabel label_1 = new JLabel("\u5206\u6570");
+		label_1.setForeground(Color.LIGHT_GRAY);
+		label_1.setFont(new Font("黑体", Font.BOLD, 16));
+		label_1.setBounds(285, 151, 54, 15);
+		add(label_1);
 		
-		// -------------2------------------
-		mainWindow2 = new MyLabel(272+175+175, 10, 233, 405);
-		mainWindow2.setBounds(272+175+175, 10, 233, 405);
+		lblScroe = new JLabel("0");
+		lblScroe.setFont(new Font("微软雅黑", Font.PLAIN, 20));
+		lblScroe.setForeground(Color.WHITE);
+		lblScroe.setBounds(293, 176, 54, 15);
+		add(lblScroe);
+		
+		JLabel label_3 = new JLabel("\u4E0B\u4E00\u4E2A\u5F62\u72B6");
+		label_3.setForeground(Color.LIGHT_GRAY);
+		label_3.setFont(new Font("黑体", Font.BOLD, 16));
+		label_3.setBounds(268, 219, 86, 15);
+		add(label_3);
+		
+		// --------------------2
+		mainWindow2 = new GameWindow(505, 10, 233, 405);
+		mainWindow2.setBounds(505, 10, 233, 405);
 		add(mainWindow2);
 		
-		nextWindow2 = new MyLabel(272+175, 24, width, 98);
-		nextWindow2.setBounds(272+175, 24, width, 98);
-		add(nextWindow2);
+		JLabel label = new JLabel("\u7B49\u7EA7");
+		label.setForeground(Color.LIGHT_GRAY);
+		label.setFont(new Font("黑体", Font.BOLD, 16));
+		label.setBounds(420, 77, 54, 15);
+		add(label);
 		
-		popedLineWindow2 = new MyLabel(272+175, 132, width, 53,
-				"Graphics/string/rmline.png");
-		popedLineWindow2.setBounds(272+175, 132, width, 53);
-		popedLineWindow2.setFont(new Font("Consolas",Font.BOLD,32));
-		add(popedLineWindow2);
+		lblLevel2 = new JLabel("0");
+		lblLevel2.setForeground(Color.WHITE);
+		lblLevel2.setFont(new Font("微软雅黑", Font.PLAIN, 20));
+		lblLevel2.setBounds(430, 102, 54, 15);
+		add(lblLevel2);
 		
-		levelWindow2 = new MyLabel(272+175, 195, width, 53,
-				"Graphics/string/level.png");
-		levelWindow2.setBounds(272+175, 195, width, 53);
-		levelWindow2.setFont(new Font("Consolas",Font.BOLD,32));
-		add(levelWindow2);
+		JLabel label_4 = new JLabel("\u5206\u6570");
+		label_4.setForeground(Color.LIGHT_GRAY);
+		label_4.setFont(new Font("黑体", Font.BOLD, 16));
+		label_4.setBounds(422, 151, 54, 15);
+		add(label_4);
 		
-		scoreWindow2 = new MyLabel(272+175, 258, width, 53,
-				"Graphics/string/score.png");
-		scoreWindow2.setBounds(272+175, 258, width, 53);
-		scoreWindow2.setFont(new Font("Consolas",Font.BOLD,32));
-		add(scoreWindow2);
+		lblScroe2 = new JLabel("0");
+		lblScroe2.setForeground(Color.WHITE);
+		lblScroe2.setFont(new Font("微软雅黑", Font.PLAIN, 20));
+		lblScroe2.setBounds(430, 176, 54, 15);
+		add(lblScroe2);
 		
-		// ----------------------------------------
-		btnResume = new MyButton("Graphics/string/start.png",86,52);
-		btnResume.setBounds(282, 353, 145, 52);
+		JLabel label_6 = new JLabel("\u4E0B\u4E00\u4E2A\u5F62\u72B6");
+		label_6.setForeground(Color.LIGHT_GRAY);
+		label_6.setFont(new Font("黑体", Font.BOLD, 16));
+		label_6.setBounds(405, 219, 86, 15);
+		add(label_6);
+				
+		// 开始和暂停键
+		btnResume = new MyButton("Graphics/window/null.png","开始",86,52);
+		btnResume.setForeground(Color.LIGHT_GRAY);
+		btnResume.setFont(new Font("黑体", Font.BOLD, 20));
+		btnResume.setBounds(271, 354, 86, 23);
 		btnResume.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
 				localController.keyResume();
@@ -125,8 +149,10 @@ public class OnlinePanel extends JPanel {
 		});
 		add(btnResume);
 		
-		btnPause = new MyButton("Graphics/string/pause.png",86,52);
-		btnPause.setBounds(447, 353, 144, 52);
+		btnPause = new MyButton("Graphics/window/null.png","暂停",86,52);
+		btnPause.setFont(new Font("黑体", Font.BOLD, 20));
+		btnPause.setForeground(Color.LIGHT_GRAY);
+		btnPause.setBounds(398, 354, 86, 23);
 		btnPause.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
 				localController.keyPause();
@@ -136,79 +162,68 @@ public class OnlinePanel extends JPanel {
 			}
 		});
 		add(btnPause);
-		
-		btnMusic= new MyButton("Graphics/string/musicImg.png",86,52);
-		btnMusic.setBounds(310, 321, 223, 23);
+				
+		btnMusic = new MyButton("Graphics/button/musicOn.png","",
+				30, 25);
+		btnMusic.setBounds(388, 30, 30, 25);
+		btnMusic.setBorderPainted(false);
 		btnMusic.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
 				if(MusicPlayer.isturnOn()){
 					MusicPlayer.setturnOn(false);
 					MusicPlayer.bgmStop();
+					// 换图片
+					btnMusic.setNewImage("Graphics/button/musicOff.png");
 				}else{
 					MusicPlayer.setturnOn(true);
 					MusicPlayer.bgmPlay();
+					// 换图片
+					btnMusic.setNewImage("Graphics/button/musicOn.png");
 				}
 			}
 		});
 		add(btnMusic);
 		
 		mainWindow.setFocusable(false);
-		nextWindow.setFocusable(false);
-		popedLineWindow.setFocusable(false);
-		levelWindow.setFocusable(false);
-		scoreWindow.setFocusable(false);
-		
-		mainWindow2.setFocusable(false);
-		nextWindow2.setFocusable(false);
-		popedLineWindow2.setFocusable(false);
-		levelWindow2.setFocusable(false);
-		scoreWindow2.setFocusable(false);
-		
 		btnResume.setFocusable(false);
 		btnPause.setFocusable(false);
 		btnMusic.setFocusable(false);
+		
+		lblNewLabel = new JLabel("New label");
+		lblNewLabel.setBounds(376, 57, 2, 259);
+		ImageIcon icon1=new ImageIcon("Graphics/window/white.png");
+        icon1.setImage(icon1.getImage().getScaledInstance((int)(2*0.9),(int)(259*0.9),Image.SCALE_DEFAULT)); 
+        lblNewLabel.setIcon(icon1);
+		add(lblNewLabel);
+		
 	}
 	@Override
 	protected void paintComponent(Graphics g) {
-		// TODO Auto-generated method stub
 		super.paintComponent(g);
-		background.draw(g);
-		
+		newbackground.draw(g);
 		// 1-------------------------------
 		mainWindow.creatwindow(g);
-		nextWindow.creatwindow(g);
-		popedLineWindow.creatwindow(g);
-		levelWindow.creatwindow(g);
-		scoreWindow.creatwindow(g);
 		
 		// 2-------------------------------
 		mainWindow2.creatwindow(g);
-		nextWindow2.creatwindow(g);
-		popedLineWindow2.creatwindow(g);
-		levelWindow2.creatwindow(g);
-		scoreWindow2.creatwindow(g);
-		
 		try{
-			popedLineWindow.setText(" "+Integer.toString(localController.getGamedao().cancelline));
-			levelWindow.setText(" "+Integer.toString(localController.getGamedao().level));
-			scoreWindow.setText(" "+Integer.toString(localController.getGamedao().score));
+			lblLevel.setText(Integer.toString(localController.getGamedao().level));
+			lblScroe.setText(Integer.toString(localController.getGamedao().score));
+			
+			lblLevel2.setText(Integer.toString(remoteController.getGameDao().level));
+			lblScroe2.setText(Integer.toString(remoteController.getGameDao().score));
 			
 			// 在这里控制下落跟下一个形状的位置
 			localController.getCurRect().draw(g, 12, 32);
-			localController.getNextRect().draw(g, 235, 72);
+			localController.getNextRect().draw(g, 200, 265);
 			localController.getGamedao().drawmap(g,0);
 			
-			popedLineWindow2.setText(" "+Integer.toString(remoteController.getGameDao().cancelline));
-			levelWindow2.setText(" "+Integer.toString(remoteController.getGameDao().level));
-			scoreWindow2.setText(" "+Integer.toString(remoteController.getGameDao().score));
-			
 			// 在这里控制下落跟下一个形状的位置
-			remoteController.getCurRect().draw(g, 623, 32);
-			remoteController.getNextRect().draw(g, 405, 72);
+			remoteController.getCurRect().draw(g, 506, 32);
+			remoteController.getNextRect().draw(g, 335, 265);
 			remoteController.getGameDao().drawmap(g,1);
 		}catch(Exception e){
 			e.printStackTrace();
 		}
 	}
-
 }
