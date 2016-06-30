@@ -28,7 +28,6 @@ public class OfflinePanel extends JPanel {
 private GameController localController;
 	
 	private LabelWithBG newbackground;
-	
 	private GameWindow mainWindow;
 	private MyButton btnMusic;
 	private MyButton btnResume;

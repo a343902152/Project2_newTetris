@@ -10,8 +10,8 @@ public class MusicPlayer {
 
     static volatile boolean running =false;
     static volatile boolean turnOn =true;
-    private static String bgmUrl="Music\\bgm.wav";
-    private static String actionUrl="Music\\action.wav";
+    private static String bgmUrl="./Music/bgm.wav";
+    private static String actionUrl="./Music/action.wav";
     
     private static AudioClip bgmAudioClip;
     private static AudioClip actionAudioClip;
