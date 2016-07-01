@@ -209,8 +209,8 @@ public class GameDao {
 
     public int generateNewRect(){
         Random random = new Random();
-        curRect.setColor(0);
         int temp=random.nextInt(7)+1;
+        curRect.setColor(0);
         curRect = new Rect(nextRect.color);
         nextRect = new Rect(temp);
 

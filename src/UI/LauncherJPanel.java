@@ -66,8 +66,8 @@ public class LauncherJPanel extends JPanel {
 
                     @Override
                     public void onError(Exception e) {
-                        System.out.println("error");
-                    }
+						JOptionPane.showMessageDialog(thisPanel, "Õ¯¬Áπ ’œ£¨≤È—Ø ß∞‹°£");
+					}
                 });
             }
 		});

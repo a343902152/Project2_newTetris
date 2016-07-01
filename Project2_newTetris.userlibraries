@@ -1,0 +1,11 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<eclipse-userlibraries>
+  <library name="gson-2.2.4">
+    <archive path="D:/Java_lib/gson-2.2.4.jar" />
+  </library>
+  <library name="servlet-api-8">
+    <archive path="D:/Java_lib/servlet-api-8.jar" />
+  </library>
+  <library name="servlet-api-8.0" />
+</eclipse-userlibraries>
+

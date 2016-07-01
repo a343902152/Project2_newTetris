@@ -38,7 +38,6 @@ public class ExchangeThread implements Runnable {
             while(true) {
                 String msg = bufferedReader.readLine();
                 if(isNum(msg)){
-                    System.out.println(msg);
                     RemoteController.remoteController.getGameDao().generateNewRectFromNet(Integer.parseInt(msg));
                     continue;
                 }

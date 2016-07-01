@@ -48,7 +48,6 @@ public class RemoteController  {
     public void rectLeft() {
         gameDao.doLeft();
         panel.repaint();
-
     }
 
     public void rectRight() {

@@ -1,45 +1,43 @@
 package Controller;
 
-import java.applet.AudioClip;
-import java.io.*;
-import java.applet.Applet;
-import java.net.MalformedURLException;
-import java.net.URL;
+
+import sun.audio.AudioPlayer;
+import sun.audio.AudioStream;
+import sun.audio.ContinuousAudioDataStream;
+
+import java.io.FileInputStream;
+import java.io.IOException;
 
 public class MusicPlayer {
 
     static volatile boolean running =false;
     static volatile boolean turnOn =true;
-    private static String bgmUrl="Music/bgm.wav";
-    private static String actionUrl="Music/action.wav";
+    private static String bgmUrl="/Music/bgm.wav";
+    private static String actionUrl="/Music/action.wav";
     
-    private static AudioClip bgmAudioClip;
-    private static AudioClip actionAudioClip;
-    
+
+    private static ContinuousAudioDataStream bgmAudio;
+    private static AudioStream actionAudio;
+
     public static void bgmPlay(){
         if(!turnOn)
     		return;
-    	if(bgmAudioClip==null){
-    		try {
-                URL cb;
-                File file = new File(bgmUrl);
-                cb = file.toURL();
-                bgmAudioClip = Applet.newAudioClip(cb);
-            } catch (MalformedURLException e) {
+
+        if(bgmAudio ==null){
+            try {
+                FileInputStream fileInputStream = new FileInputStream(System.getProperty("user.dir") + bgmUrl);
+                bgmAudio= new ContinuousAudioDataStream(new AudioStream(fileInputStream).getData());
+            } catch (IOException e) {
                 e.printStackTrace();
             }
-    	}
-    	try{
-    		bgmAudioClip.loop();
-    		running =true;
-    	}catch(Exception exception){
-    		exception.printStackTrace();
-    	}
-    	
+        }
+        AudioPlayer.player.start(bgmAudio);
+        running=true;
     }
+
     public static void bgmStop(){
     	try{
-            bgmAudioClip.stop();
+            AudioPlayer.player.stop(bgmAudio);
             running =false;
         }catch (Exception e){
             e.printStackTrace();
@@ -47,23 +45,18 @@ public class MusicPlayer {
     }
     
     public static void actionPlay(){
-    	if(!turnOn)
-    		return;
-    	if(actionAudioClip==null){
-    		try {
-                URL cb;
-                File file = new File(actionUrl);
-                cb = file.toURL();
-                actionAudioClip = Applet.newAudioClip(cb);
-            } catch (MalformedURLException e) {
+        if(!turnOn) {
+            return;
+        }
+//        if(actionAudio ==null){
+            try {
+                FileInputStream fileInputStream = new FileInputStream(System.getProperty("user.dir") + actionUrl);
+                actionAudio= new AudioStream(fileInputStream);
+            } catch (IOException e) {
                 e.printStackTrace();
             }
-    	}
-    	try{
-    		actionAudioClip.play();
-    	}catch(Exception exception){
-    		exception.printStackTrace();
-    	}
+//        }
+        AudioPlayer.player.start(actionAudio);
     }
     /**
      * 返回是否正在运行

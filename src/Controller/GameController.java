@@ -156,16 +156,15 @@ public class GameController {
 	public void keyDown() {
 		if(!isRunning) return;
 
-        if(gamedao.doDown()){
-            if(exchangeThread!=null)
-                exchangeThread.sendMessage("down");
-            panel.repaint();
-        }else{
+        if(exchangeThread!=null)
+            exchangeThread.sendMessage("down");
+        if(!gamedao.doDown()){
             // 生成新方块
             int color=gamedao.generateNewRect();
             if(exchangeThread!=null)
                 exchangeThread.sendMessage(String.valueOf(color));
         }
+        panel.repaint();
 
 	}
 

@@ -32,7 +32,6 @@ public class MainFrame extends JFrame {
     public MainFrame() {
         setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
         MusicPlayer.bgmPlay();
-
     }
 
     public void init(){
@@ -51,7 +50,6 @@ public class MainFrame extends JFrame {
     }
 
     public void chooseMode(int mode) {
-        System.out.println("mode" + mode);
         switch (mode) {
             case 0:
                 OfflinePanel offlinePanel = new OfflinePanel();
@@ -82,7 +80,7 @@ public class MainFrame extends JFrame {
                 GameController.localController.gameStart();
                 break;
             case 2:
-                String ip = JOptionPane.showInputDialog("请输入对方IP:");
+                String ip = JOptionPane.showInputDialog("请输入对方IP:","localhost");
                 String port2 = JOptionPane.showInputDialog("请输入房间号:");
                 Client.Init(ip, Integer.parseInt(port2));
                 System.out.println("连接成功");
