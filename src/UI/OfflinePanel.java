@@ -144,7 +144,6 @@ private GameController localController;
 	}
 	@Override
 	protected void paintComponent(Graphics g) {
-		// TODO Auto-generated method stub
 		super.paintComponent(g);
 		newbackground.draw(g);
 		

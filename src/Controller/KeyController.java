@@ -37,6 +37,9 @@ public class KeyController extends KeyAdapter{
 					this.gameController.keyRight();
 					break;
 				case KeyEvent.VK_SPACE:
+					this.gameController.keyChange();
+					break;
+				case KeyEvent.VK_ESCAPE:
 					this.gameController.keyPause();
 					if(MusicPlayer.isRunning()){
 						MusicPlayer.bgmStop();

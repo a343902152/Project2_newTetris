@@ -80,28 +80,29 @@ public class Rect {
 				}		
 		}	
 	
-	public void down(){
-			for(int i=0;i<4;i++)
-				this.y[i] = this.y[i] + 1;
+	public void down() {
+        for (int i = 0; i < 4; i++)
+            this.y[i] = this.y[i] + 1;
 
+    }
+	
+	public void left() {
+		for (int i = 0; i < 4; i++)
+			this.x[i] = (this.x[i] - 1 + 11) % 11;
 	}
 	
-	public void left(){
-		
-		for(int i=0;i<4;i++)
-			this.x[i] = this.x[i] - 1;
-
-	}
-	
-	public void right(){
-
-		for(int i=0;i<4;i++)
-			this.x[i] = this.x[i] + 1;
-
-	}
+	public void right() {
+        for (int i = 0; i < 4; i++)
+            this.x[i] = (this.x[i] + 1) % 11;
+    }
 
 
 	public void setColor(int color) {
 		this.color = color;
+	}
+
+	public void up() {
+		for(int i=0;i<4;i++)
+			this.y[i] = this.y[i] - 1;
 	}
 }

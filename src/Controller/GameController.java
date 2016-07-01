@@ -164,15 +164,25 @@ public class GameController {
 		timer.schedule(new GameTask(), 100,30);
 	}
 
-	public void keyUp() {
-		if(!isRunning) return;
-		if(!gamedao.ifcanChange(curRect)) return;
 
-		curRect.change();
-		if(exchangeThread!=null)
-			exchangeThread.sendMessage("up");
-		panel.repaint();
-		
+    public void keyChange(){
+        if(!isRunning) return;
+        if(!gamedao.ifcanChange(curRect)) return;
+
+        curRect.change();
+        if(exchangeThread!=null)
+            exchangeThread.sendMessage("change");
+        panel.repaint();
+    }
+
+	public void keyUp() {
+        if(!isRunning) return;
+        if(gamedao.isUpSide(curRect))	return;
+
+        curRect.up();
+        if(exchangeThread!=null)
+            exchangeThread.sendMessage("up");
+        panel.repaint();
 	}
 
 	public void keyDown() {
