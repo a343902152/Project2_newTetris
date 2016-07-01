@@ -7,8 +7,6 @@ import java.net.Socket;
 import Controller.GameController;
 import Controller.RemoteController;
 import com.google.gson.Gson;
-import dao.GameDao;
-import entity.GamedaoMessage;
 
 /**
  * 进程通信线程
@@ -30,12 +28,37 @@ public class ExchangeThread implements Runnable {
         }
         new Thread(this).start();
     }
+
+    public static boolean isNum(String str){
+        return str.matches("^[-+]?(([0-9]+)([.]([0-9]+))?|([.]([0-9]+))?)$");
+    }
+
     public void run() {
         try {
             while(true) {
                 String msg = bufferedReader.readLine();
+                if(isNum(msg)){
+                    System.out.println(msg);
+                    RemoteController.remoteController.getGameDao().generateNewRectFromNet(Integer.parseInt(msg));
+                    continue;
+                }
                 switch (msg){
-                    case "gamaover":
+                    case "up":
+                        RemoteController.remoteController.rectUp();
+                        break;
+                    case "down":
+                        RemoteController.remoteController.rectDown();
+                        break;
+                    case "left":
+                        RemoteController.remoteController.rectLeft();
+                        break;
+                    case "right":
+                        RemoteController.remoteController.rectRight();
+                        break;
+                    case "change":
+                        RemoteController.remoteController.rectChange();
+                        break;
+                    case "gameover":
                         RemoteController.remoteController.gameover();
                         break;
                     case "keyPause":
@@ -43,10 +66,6 @@ public class ExchangeThread implements Runnable {
                         break;
                     case "keyResume":
                         GameController.localController.resume();
-                        break;
-                    default:
-                        GamedaoMessage message=gson.fromJson(msg,GamedaoMessage.class);
-                        RemoteController.remoteController.getGameDao().setGamedaoMessage(message);
                         break;
                 }
             }

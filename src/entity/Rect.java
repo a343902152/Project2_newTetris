@@ -101,14 +101,4 @@ public class Rect {
 		for(int i=0;i<4;i++)
 			this.y[i] = this.y[i] - 1;
 	}
-
-	public RectMessage getRectMessage(){
-        return new RectMessage(x,y,color);
-	}
-
-    public void setRectMessage(RectMessage message){
-        this.x=message.getX();
-        this.y=message.getY();
-        this.color=message.getColor();
-    }
 }

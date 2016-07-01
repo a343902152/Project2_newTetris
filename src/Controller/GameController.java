@@ -8,9 +8,10 @@ import UI.OfflinePanel;
 import UI.OnlinePanel;
 import com.google.gson.Gson;
 import dao.GameDao;
-import entity.GamedaoMessage;
+import entity.Rect;
 
 import javax.swing.*;
+import java.util.Random;
 import java.util.Timer;
 import java.util.TimerTask;
 
@@ -38,8 +39,6 @@ public class GameController {
 	// 远程通信用的线程
 	private ExchangeThread exchangeThread;
 
-    private Gson gson=new Gson();
-
 	private class GameTask extends TimerTask {
 		private int timeSlice = 5;
         public void run() {
@@ -50,9 +49,7 @@ public class GameController {
                 if(gamedao.isGameover()){
                     doGameOver();
                 }else{
-                    gamedao.doDown();
-                    if(exchangeThread!=null)
-//                        exchangeThread.sendMessage("down");
+                    keyDown();
                     panel.repaint();
                     timeSlice =10-gamedao.level;
                 }
@@ -96,7 +93,6 @@ public class GameController {
     private void updateScore(int myScore, String userName) {
         String url= HttpUtil.BASE_URL+"score?action=updateScore"+
                 "&userName="+userName+"&score="+myScore;
-        System.out.println(url);
         HttpUtil.sendHttpRequest(url, new HttpCallbackListener() {
             @Override
             public void onFinish(String response) {
@@ -129,7 +125,6 @@ public class GameController {
 	 */
 	public void gameStart(){
 		gamedao = new GameDao();
-
 		isRunning =true;
 
 		timer = new Timer();
@@ -142,8 +137,7 @@ public class GameController {
 
         if(gamedao.doChange()){
             if(exchangeThread!=null){
-                String msg=gson.toJson(gamedao.getGamedaoMessage());
-                exchangeThread.sendMessage(msg);
+                exchangeThread.sendMessage("change");
             }
             panel.repaint();
         }
@@ -164,8 +158,13 @@ public class GameController {
 
         if(gamedao.doDown()){
             if(exchangeThread!=null)
-//                exchangeThread.sendMessage("down");
+                exchangeThread.sendMessage("down");
             panel.repaint();
+        }else{
+            // 生成新方块
+            int color=gamedao.generateNewRect();
+            if(exchangeThread!=null)
+                exchangeThread.sendMessage(String.valueOf(color));
         }
 
 	}

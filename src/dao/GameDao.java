@@ -1,6 +1,5 @@
 package dao;
 
-import entity.GamedaoMessage;
 import entity.Rect;
 
 import java.awt.*;
@@ -92,14 +91,13 @@ public class GameDao {
      */
     public boolean ifcanChange() {
         for (int i = 0; i < 4; i++) {
-            System.out.println(curRect.x[i] + "," + curRect.x[(i + 1) % 4]);
             if (Math.abs(curRect.x[i] - curRect.x[(i + 1) % 4]) >= 5) {
                 return false;
             }
             int change_x = curRect.y[i] - curRect.y[0] + curRect.x[0];
             int change_y = curRect.x[0] - curRect.x[i] + curRect.y[0];
 
-            if (change_x < 0 || change_y < 0 || change_x > 10 || gamemap[change_x][change_y])
+            if (change_x < 0 || change_y < 0 || change_x > 10 ||change_y>19||gamemap[change_x][change_y])
                 return false;
         }
         return true;
@@ -189,16 +187,6 @@ public class GameDao {
             return true;
         }else{
             ispop();
-            if(isGameover()){
-                return false;
-            }
-            // 生成新方块
-            Random random = new Random();
-            curRect.setColor(0);
-            int temp=random.nextInt(7)+1;
-            curRect = new Rect(nextRect.color);
-            nextRect = new Rect(temp);
-
             return false;
         }
     }
@@ -219,26 +207,27 @@ public class GameDao {
         return false;
     }
 
+    public int generateNewRect(){
+        Random random = new Random();
+        curRect.setColor(0);
+        int temp=random.nextInt(7)+1;
+        curRect = new Rect(nextRect.color);
+        nextRect = new Rect(temp);
+
+        return  temp;
+    }
+
+    public void generateNewRectFromNet(int color){
+        curRect.setColor(0);
+        curRect=new Rect(nextRect.color);
+        nextRect=new Rect(color);
+    }
+
     public void drawCurRect(Graphics g,int x,int y){
         curRect.draw(g,x,y);
     }
     public void drawNextRect(Graphics g,int x,int y){
         nextRect.draw(g,x,y);
-    }
-
-    public GamedaoMessage getGamedaoMessage(){
-        return new GamedaoMessage(gamemap,cancelline,score,level,
-                curRect.getRectMessage(),nextRect.getRectMessage());
-    }
-
-    public void setGamedaoMessage(GamedaoMessage message){
-        this.gamemap=message.getGamemap();
-        this.cancelline=message.cancelline;
-        this.score=message.getScore();
-        this.level=message.getLevel();
-
-        this.curRect.setRectMessage(message.getCurRect());
-        this.nextRect.setRectMessage(message.getNextRect());
     }
 
 }

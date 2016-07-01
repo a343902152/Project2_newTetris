@@ -30,6 +30,31 @@ public class RemoteController  {
     }
 
 
+    // 图形控制
+    public void rectChange() {
+        gameDao.doChange();
+        panel.repaint();
+    }
+
+    public void rectUp(){
+        gameDao.doUp();
+        panel.repaint();
+    }
+    public void rectDown() {
+        gameDao.doDown();
+        panel.repaint();
+    }
+
+    public void rectLeft() {
+        gameDao.doLeft();
+        panel.repaint();
+
+    }
+
+    public void rectRight() {
+        gameDao.doRight();
+        panel.repaint();
+    }
 
     public void gameover(){
         // 接到另一方的命令，首先暂停另一个controller，然后比较分数
