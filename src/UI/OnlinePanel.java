@@ -214,12 +214,12 @@ public class OnlinePanel extends JPanel {
 			lblScroe2.setText(Integer.toString(remoteController.getGameDao().score));
 			
 			// 在这里控制下落跟下一个形状的位置
-			localController.getCurRect().draw(g, 12, 32);
+			localController.getCurRect().draw(g, 12, 12);
 			localController.getNextRect().draw(g, 200, 265);
 			localController.getGamedao().drawmap(g,0);
 			
 			// 在这里控制下落跟下一个形状的位置
-			remoteController.getCurRect().draw(g, 506, 32);
+			remoteController.getCurRect().draw(g, 506, 12);
 			remoteController.getNextRect().draw(g, 335, 265);
 			remoteController.getGameDao().drawmap(g,1);
 		}catch(Exception e){

@@ -1,5 +1,8 @@
 package Controller;
 
+import Main.Main;
+import MySocket.Client;
+import MySocket.Server;
 import dao.GameDao;
 import entity.Rect;
 
@@ -49,7 +52,7 @@ public class RemoteController  {
 
     // 图形控制
     public void rectUp() {
-        curRect.change();
+        curRect.up();
         panel.repaint();
     }
     public void rectDown() {
@@ -65,6 +68,11 @@ public class RemoteController  {
 
     public void rectRight() {
         curRect.right();
+        panel.repaint();
+    }
+
+    public void rectChange(){
+        curRect.change();
         panel.repaint();
     }
 
@@ -92,6 +100,7 @@ public class RemoteController  {
             // pingju
             JOptionPane.showMessageDialog(panel,str+"这是一场平局");
         }
+        Main.getFrame().init();
     }
 
 

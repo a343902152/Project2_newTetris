@@ -65,6 +65,10 @@ public class GameDao {
 
     public boolean ifcanChange(Rect nowrect) {
         for (int i = 0; i < 4; i++) {
+            System.out.println(nowrect.x[i] + "," + nowrect.x[(i + 1) % 4]);
+            if (Math.abs(nowrect.x[i] - nowrect.x[(i + 1) % 4]) >= 5) {
+                return false;
+            }
             int change_x = nowrect.y[i] - nowrect.y[0] + nowrect.x[0];
             int change_y = nowrect.x[0] - nowrect.x[i] + nowrect.y[0];
 
@@ -75,14 +79,11 @@ public class GameDao {
     }
 
     public boolean gameover() {
-
-        //boolean game=false;
         for (int x = 0; x < 11; x++) {
             if (gamemap[x][0] == true)
                 return true;
         }
         return false;
-
     }
 
     /**
@@ -133,9 +134,9 @@ public class GameDao {
             for (int y = 0; y < 20; y++)
                 if (gamemap[x][y] == true) {
                     if (mode == 1) {
-                        rect.drawone(g, 506, 32, x, y);
+                        rect.drawone(g, 506, 12, x, y);
                     } else {
-                        rect.drawone(g, 12, 32, x, y);
+                        rect.drawone(g, 12, 12, x, y);
                     }
                 }
     }

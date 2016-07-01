@@ -8,12 +8,14 @@ import java.net.Socket;
  * Created by hp on 2015/11/1.
  */
 public class Client {
-//    public static final int PORT = 12345;//监听的端口号
     private static ExchangeThread clientExchangeThread;
+    private static Socket socket;
 
-    public static void Init(int PORT){
+    
+
+    public static void Init(String ip,int PORT){
         try {
-            Socket socket = new Socket("localhost",PORT);
+            socket = new Socket(ip,PORT);
             System.out.println("客户端IP:"+socket.getLocalAddress()+"端口"+socket.getPort());
             // 启动交流线程
             clientExchangeThread=new ExchangeThread(socket);
@@ -24,4 +26,5 @@ public class Client {
     public static ExchangeThread getExchangeThread(){
         return clientExchangeThread;
     }
+
 }

@@ -8,13 +8,15 @@ public class Server {
 //    public static final int PORT = 12345;//监听的端口号
     private static ExchangeThread serverExchangeThread;
 
+    private static ServerSocket ss;
+    private static Socket socket;
     public static void Init(int PORT){
         try {
-            ServerSocket ss = new ServerSocket(PORT);
+            ss = new ServerSocket(PORT);
             System.out.println("端口号"+PORT+",服务器已启动");
-            Socket s = ss.accept();
+            socket = ss.accept();
             // 启动交流线程
-            serverExchangeThread=new ExchangeThread(s);
+            serverExchangeThread=new ExchangeThread(socket);
         } catch (IOException e) {
             e.printStackTrace();
         }

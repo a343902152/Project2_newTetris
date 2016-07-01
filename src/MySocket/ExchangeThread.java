@@ -56,6 +56,9 @@ public class ExchangeThread implements Runnable {
                     case "right":
                         RemoteController.remoteController.rectRight();
                         break;
+                    case "change":
+                        RemoteController.remoteController.rectChange();
+                        break;
                     case "isput":
                         RemoteController.remoteController.isPut();
                         break;

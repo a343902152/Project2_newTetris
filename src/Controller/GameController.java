@@ -1,10 +1,16 @@
 package Controller;
 
+import HttpUtils.HttpCallbackListener;
+import HttpUtils.HttpUtil;
+import Main.Main;
+import MySocket.Client;
 import MySocket.ExchangeThread;
+import MySocket.Server;
 import UI.OfflinePanel;
 import UI.OnlinePanel;
 import dao.GameDao;
 import entity.Rect;
+import entity.Score;
 
 import javax.swing.*;
 import java.util.Random;
@@ -78,10 +84,15 @@ public class GameController {
 								// pingju
 								JOptionPane.showMessageDialog(panel, str + "这是一场平局");
 							}
-						}else{
+                            Main.getFrame().init();
+                        }else{
 							int myScore = gamedao.score;
 							JOptionPane.showMessageDialog(panel, "游戏结束."+
 							"你的得分为:"+Integer.toString(myScore));
+							String userName=JOptionPane.showInputDialog("请输入您的名字:");
+
+
+                            updateScore(myScore, userName);
 						}
 						return;
 					}
@@ -118,25 +129,36 @@ public class GameController {
 			}
         }
     }
-	public GameController(JPanel panel){
+
+    private void updateScore(int myScore, String userName) {
+        String url= HttpUtil.BASE_URL+"score?action=updateScore"+
+                "&userName="+userName+"&score="+myScore;
+        System.out.println(url);
+        HttpUtil.sendHttpRequest(url, new HttpCallbackListener() {
+            @Override
+            public void onFinish(String response) {
+                if(response.equals("failed")){
+                    JOptionPane.showMessageDialog(panel, "未知原因，上传失败");
+                }else{
+                    JOptionPane.showMessageDialog(panel, "分数上传成功");
+                }
+                Main.getFrame().init();
+            }
+            @Override
+            public void onError(Exception e) {
+                JOptionPane.showMessageDialog(panel, "网络故障，上传失败。");
+                Main.getFrame().init();
+            }
+        });
+    }
+
+    public GameController(JPanel panel){
 		this.panel=(OfflinePanel)panel;
 	}
 
 	public GameController(ExchangeThread thread,OnlinePanel panel) {
 		this.exchangeThread=thread;
 		this.panel=(OnlinePanel)panel;
-
-
-//		Random random = new Random();
-//		// 随机产生方块
-//		this.curRect = new Rect(random.nextInt(7)+1);
-//		this.nextRect = new Rect(random.nextInt(7)+1);
-//
-//
-//		if(exchangeThread!=null){
-//			exchangeThread.sendMessage(Integer.toString(curRect.color));
-//			exchangeThread.sendMessage(Integer.toString(nextRect.color));
-//		}
 	}
 
 	/**
@@ -147,18 +169,10 @@ public class GameController {
 		gamedao = new GameDao();
 
 
-		// 随机产生方块
-//		this.curRect = new Rect(random.nextInt(7)+1);
-//		this.nextRect = new Rect(random.nextInt(7)+1);
-
 		this.curRect = new Rect(1);
 		this.nextRect = new Rect(2);
 
 		isRunning =true;
-//		if(exchangeThread!=null){
-//			exchangeThread.sendMessage(Integer.toString(curRect.color));
-//			exchangeThread.sendMessage(Integer.toString(nextRect.color));
-//		}
 
 		timer = new Timer();
 		timer.schedule(new GameTask(), 100,30);
