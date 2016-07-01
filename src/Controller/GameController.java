@@ -3,17 +3,14 @@ package Controller;
 import HttpUtils.HttpCallbackListener;
 import HttpUtils.HttpUtil;
 import Main.Main;
-import MySocket.Client;
 import MySocket.ExchangeThread;
-import MySocket.Server;
 import UI.OfflinePanel;
 import UI.OnlinePanel;
+import com.google.gson.Gson;
 import dao.GameDao;
-import entity.Rect;
-import entity.Score;
+import entity.GamedaoMessage;
 
 import javax.swing.*;
-import java.util.Random;
 import java.util.Timer;
 import java.util.TimerTask;
 
@@ -35,98 +32,64 @@ public class GameController {
 		return gamedao;
 	}
 
-	public Rect getCurRect() {
-		return curRect;
-	}
-
-	public Rect getNextRect() {
-		return nextRect;
-	}
-
 	// 游戏进程控制器，比如碰撞检测之类的
 	private GameDao gamedao;
-
-	// 当前图形与下一个图形
-	private Rect curRect;
-	private Rect nextRect;
 
 	// 远程通信用的线程
 	private ExchangeThread exchangeThread;
 
-	private class GameTask extends TimerTask {
-		private int speed = 5;
-        public void run() {
+    private Gson gson=new Gson();
 
+	private class GameTask extends TimerTask {
+		private int timeSlice = 5;
+        public void run() {
 			if(!isRunning){
 				return ;
 			}
-
-			// speed来控制时间间隔。。
-        	if(speed <= 0){
-				if(gamedao.isput(curRect)){
-					if(gamedao.gameover()) {
-						System.out.println("begin to end game");
-						// 先暂停游戏
-						isRunning = false;
-						if(exchangeThread!=null){
-							exchangeThread.sendMessage("gameover");
-							int myScore = gamedao.score;
-							int remoteScore = RemoteController.remoteController.getGameDao().score;
-
-							String str = Integer.toString(myScore) + "比" + Integer.toString(remoteScore) + ",";
-							if (myScore > remoteScore) {
-								// WIN
-								JOptionPane.showMessageDialog(panel, str + "你赢了");
-							} else if (myScore < remoteScore) {
-								// LOSE
-								JOptionPane.showMessageDialog(panel, str + "你输了");
-							} else {
-								// pingju
-								JOptionPane.showMessageDialog(panel, str + "这是一场平局");
-							}
-                            Main.getFrame().init();
-                        }else{
-							int myScore = gamedao.score;
-							JOptionPane.showMessageDialog(panel, "游戏结束."+
-							"你的得分为:"+Integer.toString(myScore));
-							String userName=JOptionPane.showInputDialog("请输入您的名字:");
-
-
-                            updateScore(myScore, userName);
-						}
-						return;
-					}
-					Random random = new Random();
-					// 已经放下来了的意思
-					if(exchangeThread!=null){
-						exchangeThread.sendMessage("isput");
-					}
-					curRect.setColor(0);
-					int temp=random.nextInt(7)+1;
-					curRect = new Rect(nextRect.color);
-					nextRect = new Rect(temp);
-					if(exchangeThread!=null){
-						// 更新rect的命令,只发送下一个的
-						exchangeThread.sendMessage(Integer.toString(temp));
-					}
-					if(gamedao.ispop()){
-						// 消去一行
-						if(exchangeThread!=null){
-							exchangeThread.sendMessage("ispop");
-						}
-					}
+        	if(timeSlice <= 0){
+                if(gamedao.isGameover()){
+                    doGameOver();
                 }else{
-					curRect.down();
-					if(exchangeThread!=null)
-						exchangeThread.sendMessage("down");
-				}
-				// 如果没有放下来，就down
-                panel.repaint();
-                speed=10-gamedao.level;
+                    gamedao.doDown();
+                    if(exchangeThread!=null)
+//                        exchangeThread.sendMessage("down");
+                    panel.repaint();
+                    timeSlice =10-gamedao.level;
+                }
         	}
         	else{
-				speed--;
+				timeSlice--;
 			}
+        }
+    }
+
+    private void doGameOver() {
+        System.out.println("begin to end game");
+        // 先暂停游戏
+        isRunning = false;
+        if(exchangeThread!=null){
+            exchangeThread.sendMessage("gameover");
+            int myScore = gamedao.score;
+            int remoteScore = RemoteController.remoteController.getGameDao().score;
+
+            String str = Integer.toString(myScore) + "比" + Integer.toString(remoteScore) + ",";
+            if (myScore > remoteScore) {
+                // WIN
+                JOptionPane.showMessageDialog(panel, str + "你赢了");
+            } else if (myScore < remoteScore) {
+                // LOSE
+                JOptionPane.showMessageDialog(panel, str + "你输了");
+            } else {
+                // pingju
+                JOptionPane.showMessageDialog(panel, str + "这是一场平局");
+            }
+            Main.getFrame().init();
+        }else{
+            int myScore = gamedao.score;
+            JOptionPane.showMessageDialog(panel, "游戏结束."+
+                    "你的得分为:"+Integer.toString(myScore));
+            String userName=JOptionPane.showInputDialog("请输入您的名字:");
+            updateScore(myScore, userName);
         }
     }
 
@@ -165,12 +128,7 @@ public class GameController {
 	 * 启动游戏
 	 */
 	public void gameStart(){
-
 		gamedao = new GameDao();
-
-
-		this.curRect = new Rect(1);
-		this.nextRect = new Rect(2);
 
 		isRunning =true;
 
@@ -181,55 +139,56 @@ public class GameController {
 
     public void keyChange(){
         if(!isRunning) return;
-        if(!gamedao.ifcanChange(curRect)) return;
 
-        curRect.change();
-        if(exchangeThread!=null)
-            exchangeThread.sendMessage("change");
-        panel.repaint();
+        if(gamedao.doChange()){
+            if(exchangeThread!=null){
+                String msg=gson.toJson(gamedao.getGamedaoMessage());
+                exchangeThread.sendMessage(msg);
+            }
+            panel.repaint();
+        }
     }
 
 	public void keyUp() {
         if(!isRunning) return;
-        if(gamedao.isUpSide(curRect))	return;
 
-        curRect.up();
-        if(exchangeThread!=null)
-            exchangeThread.sendMessage("up");
-        panel.repaint();
+        if(gamedao.doUp()){
+            if(exchangeThread!=null)
+                exchangeThread.sendMessage("up");
+            panel.repaint();
+        }
 	}
 
 	public void keyDown() {
 		if(!isRunning) return;
-		if(gamedao.isput(curRect)) return;
-		
-		curRect.down();
-		if(exchangeThread!=null)
-			exchangeThread.sendMessage("down");
-    	panel.repaint();
+
+        if(gamedao.doDown()){
+            if(exchangeThread!=null)
+//                exchangeThread.sendMessage("down");
+            panel.repaint();
+        }
 
 	}
 
 	public void keyLeft() {
 		if(!isRunning) return;
-		if(gamedao.isleftside(curRect))	return;
-		
-		curRect.left();
-		if(exchangeThread!=null)
-			exchangeThread.sendMessage("left");
-		panel.repaint();
+
+        if(gamedao.doLeft()){
+            if(exchangeThread!=null)
+                exchangeThread.sendMessage("left");
+            panel.repaint();
+        }
 				
 	}
 
 	public void keyRight() {
 		if(!isRunning) return;
-		if(gamedao.isrightside(curRect))	return;
-		
-		curRect.right();
-		if(exchangeThread!=null)
-			exchangeThread.sendMessage("right");
-		panel.repaint();
-				
+
+        if(gamedao.doRight()){
+            if(exchangeThread!=null)
+                exchangeThread.sendMessage("right");
+            panel.repaint();
+        }
 	}
 
 	/**

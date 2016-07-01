@@ -6,6 +6,9 @@ import java.net.Socket;
 
 import Controller.GameController;
 import Controller.RemoteController;
+import com.google.gson.Gson;
+import dao.GameDao;
+import entity.GamedaoMessage;
 
 /**
  * 进程通信线程
@@ -15,9 +18,7 @@ public class ExchangeThread implements Runnable {
     BufferedReader bufferedReader;
     BufferedWriter bufferedWriter;
 
-    public static boolean isNum(String str){
-        return str.matches("^[-+]?(([0-9]+)([.]([0-9]+))?|([.]([0-9]+))?)$");
-    }
+    private Gson gson=new Gson();
 
     public ExchangeThread(Socket client) {
         socket = client;
@@ -32,40 +33,9 @@ public class ExchangeThread implements Runnable {
     public void run() {
         try {
             while(true) {
-                // 这里负责读
-                String mess = bufferedReader.readLine();
-                if(isNum(mess)) {
-                    int color=Integer.parseInt(mess);
-                    if(RemoteController.remoteController.getCurRect()==null){
-                        RemoteController.remoteController.setcurRect(color);
-                    }else{
-                        RemoteController.remoteController.setcurRect(RemoteController.remoteController.getNextRect().color);
-                        RemoteController.remoteController.setNextRect(color);
-                    }
-                }
-                switch (mess){
-                    case "up":
-                        RemoteController.remoteController.rectUp();
-                        break;
-                    case "down":
-                        RemoteController.remoteController.rectDown();
-                        break;
-                    case "left":
-                        RemoteController.remoteController.rectLeft();
-                        break;
-                    case "right":
-                        RemoteController.remoteController.rectRight();
-                        break;
-                    case "change":
-                        RemoteController.remoteController.rectChange();
-                        break;
-                    case "isput":
-                        RemoteController.remoteController.isPut();
-                        break;
-                    case "ispop":
-                        RemoteController.remoteController.ispop();
-                        break;
-                    case "gameover":
+                String msg = bufferedReader.readLine();
+                switch (msg){
+                    case "gamaover":
                         RemoteController.remoteController.gameover();
                         break;
                     case "keyPause":
@@ -73,6 +43,10 @@ public class ExchangeThread implements Runnable {
                         break;
                     case "keyResume":
                         GameController.localController.resume();
+                        break;
+                    default:
+                        GamedaoMessage message=gson.fromJson(msg,GamedaoMessage.class);
+                        RemoteController.remoteController.getGameDao().setGamedaoMessage(message);
                         break;
                 }
             }
@@ -91,7 +65,6 @@ public class ExchangeThread implements Runnable {
     }
 
     public void sendMessage(String str){
-        // 这里负责写
         try {
             bufferedWriter.write(str);
             bufferedWriter.newLine();

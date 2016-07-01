@@ -25,65 +25,12 @@ public class RemoteController  {
         return gameDao;
     }
 
-    // 当前图形与下一个图形
-    private Rect curRect;
-    private Rect nextRect;
-
-    public void setcurRect(int color){
-        curRect =new Rect(color);
-    }
-
-    public void setNextRect(int color){
-        nextRect =new Rect(color);
-    }
-    public Rect getCurRect() {
-        return curRect;
-    }
-
-    public Rect getNextRect() {
-        return nextRect;
-    }
-
     public RemoteController(OnlinePanel panel) {
         this.panel=panel;
-        curRect =new Rect(1);
-        nextRect =new Rect(2);
     }
 
-    // 图形控制
-    public void rectUp() {
-        curRect.up();
-        panel.repaint();
-    }
-    public void rectDown() {
-        curRect.down();
-        panel.repaint();
-    }
 
-    public void rectLeft() {
-        curRect.left();
-        panel.repaint();
 
-    }
-
-    public void rectRight() {
-        curRect.right();
-        panel.repaint();
-    }
-
-    public void rectChange(){
-        curRect.change();
-        panel.repaint();
-    }
-
-    // 图形停止、消去
-    public void isPut(){
-        gameDao.isput(curRect);
-        curRect.setColor(0);
-    }
-    public void ispop(){
-        gameDao.ispop();
-    }
     public void gameover(){
         // 接到另一方的命令，首先暂停另一个controller，然后比较分数
         int remoteScore= GameController.localController.gameover();
@@ -102,6 +49,7 @@ public class RemoteController  {
         }
         Main.getFrame().init();
     }
+
 
 
 }

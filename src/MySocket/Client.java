@@ -11,7 +11,7 @@ public class Client {
     private static ExchangeThread clientExchangeThread;
     private static Socket socket;
 
-    
+
 
     public static void Init(String ip,int PORT){
         try {

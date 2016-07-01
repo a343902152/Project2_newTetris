@@ -1,8 +1,10 @@
 package dao;
 
+import entity.GamedaoMessage;
 import entity.Rect;
 
 import java.awt.*;
+import java.util.Random;
 
 /**
  * 游戏过程中的碰撞检测、分数计算等
@@ -14,6 +16,9 @@ public class GameDao {
     public int score = 0;
     public int level = 0;
 
+    private Rect curRect;
+    private Rect nextRect;
+
     public GameDao() {
         // 11X19的方格，而且初始化为未占用
         this.gamemap = new boolean[11][20];
@@ -21,9 +26,15 @@ public class GameDao {
             for (int y = 0; y < 20; y++)
                 gamemap[x][y] = false;
 
+        curRect=new Rect(1);
+        nextRect=new Rect(2);
     }
 
-    public boolean isUpSide(Rect curRect) {
+    /**
+     * 上面有墙返回ture
+     * @return
+     */
+    public boolean isUpSide() {
         for (int i = 0; i < 4; i++) {
             if (curRect.y[i] <= 0||gamemap[(curRect.x[i]) % 11][curRect.y[i]-1])
                 return true;
@@ -31,46 +42,62 @@ public class GameDao {
         return false;
     }
 
-    public boolean isleftside(Rect nowrect) {
+    /**
+     * 左边有墙返回true
+     * @return
+     */
+    public boolean isleftside() {
         for (int i = 0; i < 4; i++) {
-            if (gamemap[(nowrect.x[i] - 1 + 11) % 11][nowrect.y[i]])
+            if (gamemap[(curRect.x[i] - 1 + 11) % 11][curRect.y[i]])
                 return true;
         }
         return false;
     }
 
-    public boolean isrightside(Rect nowrect) {
+    /**
+     * 右边有墙返回ture
+     * @return
+     */
+    public boolean isrightside() {
         for (int i = 0; i < 4; i++) {
-            if (gamemap[(nowrect.x[i] + 1) % 11][nowrect.y[i]])
+            if (gamemap[(curRect.x[i] + 1) % 11][curRect.y[i]])
                 return true;
         }
         return false;
     }
 
-    public boolean isput(Rect nowrect) {
+
+    /**
+     * 如果成功放置(底部碰到某个障碍物)就返回ture
+     * @return
+     */
+    public boolean isput() {
         boolean isput = false;
         for (int i = 0; i < 4; i++)
             //底下有墙或者方块
-            if (nowrect.y[i] >= 19 || gamemap[nowrect.x[i]][nowrect.y[i] + 1]) {
+            if (curRect.y[i] >= 19 || gamemap[curRect.x[i]][curRect.y[i] + 1]) {
                 isput = true;
                 break;
             }
         if (isput)
-            //如果isput，放进地图
+            //如果isput，放进地图_ doPut()
             for (int j = 0; j < 4; j++)
-                gamemap[nowrect.x[j]][nowrect.y[j]] = true;
-
+                gamemap[curRect.x[j]][curRect.y[j]] = true;
         return isput;
     }
 
-    public boolean ifcanChange(Rect nowrect) {
+    /**
+     * 判断是否可以change，可以的话返回true
+     * @return
+     */
+    public boolean ifcanChange() {
         for (int i = 0; i < 4; i++) {
-            System.out.println(nowrect.x[i] + "," + nowrect.x[(i + 1) % 4]);
-            if (Math.abs(nowrect.x[i] - nowrect.x[(i + 1) % 4]) >= 5) {
+            System.out.println(curRect.x[i] + "," + curRect.x[(i + 1) % 4]);
+            if (Math.abs(curRect.x[i] - curRect.x[(i + 1) % 4]) >= 5) {
                 return false;
             }
-            int change_x = nowrect.y[i] - nowrect.y[0] + nowrect.x[0];
-            int change_y = nowrect.x[0] - nowrect.x[i] + nowrect.y[0];
+            int change_x = curRect.y[i] - curRect.y[0] + curRect.x[0];
+            int change_y = curRect.x[0] - curRect.x[i] + curRect.y[0];
 
             if (change_x < 0 || change_y < 0 || change_x > 10 || gamemap[change_x][change_y])
                 return false;
@@ -78,7 +105,7 @@ public class GameDao {
         return true;
     }
 
-    public boolean gameover() {
+    public boolean isGameover() {
         for (int x = 0; x < 11; x++) {
             if (gamemap[x][0] == true)
                 return true;
@@ -88,7 +115,6 @@ public class GameDao {
 
     /**
      * 是否成功消去一行
-     *
      * @return
      */
     public boolean ispop() {
@@ -141,5 +167,78 @@ public class GameDao {
                 }
     }
 
+    public boolean doChange() {
+        if(ifcanChange()){
+            curRect.change();
+            return true;
+        }
+        return false;
+    }
+
+    public boolean doUp() {
+        if (!isUpSide()) {
+            curRect.up();
+            return true;
+        }
+        return false;
+    }
+
+    public boolean doDown() {
+        if(!isput()){
+            curRect.down();
+            return true;
+        }else{
+            ispop();
+            if(isGameover()){
+                return false;
+            }
+            // 生成新方块
+            Random random = new Random();
+            curRect.setColor(0);
+            int temp=random.nextInt(7)+1;
+            curRect = new Rect(nextRect.color);
+            nextRect = new Rect(temp);
+
+            return false;
+        }
+    }
+
+    public boolean doLeft() {
+        if (!isleftside()) {
+            curRect.left();
+            return true;
+        }
+        return false;
+    }
+
+    public boolean doRight() {
+        if (!isrightside()) {
+            curRect.right();
+            return true;
+        }
+        return false;
+    }
+
+    public void drawCurRect(Graphics g,int x,int y){
+        curRect.draw(g,x,y);
+    }
+    public void drawNextRect(Graphics g,int x,int y){
+        nextRect.draw(g,x,y);
+    }
+
+    public GamedaoMessage getGamedaoMessage(){
+        return new GamedaoMessage(gamemap,cancelline,score,level,
+                curRect.getRectMessage(),nextRect.getRectMessage());
+    }
+
+    public void setGamedaoMessage(GamedaoMessage message){
+        this.gamemap=message.getGamemap();
+        this.cancelline=message.cancelline;
+        this.score=message.getScore();
+        this.level=message.getLevel();
+
+        this.curRect.setRectMessage(message.getCurRect());
+        this.nextRect.setRectMessage(message.getNextRect());
+    }
 
 }

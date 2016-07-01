@@ -9,21 +9,19 @@ import java.awt.*;
 public class Rect {
 
 	protected static final int RECTW = 20;
-	
+
 	protected static final int RECTH = 20;
-		
+
 	public int[] x = new int[4];
-	
 	public int[] y = new int[4];
-	
 	public int color;
-	
+
 	public Image RECT_IMG = new ImageIcon("Graphics/game/newmyrect.png").getImage();
-		
+
 	public Rect(int color){
 		this.color = color;
 		switch(color){
-			case 1: 
+			case 1:
 				this.x[0]=5 ;this.x[1]=4 ;this.x[2]=6 ;this.x[3]=7 ;	//长条形
 				this.y[0]=0;this.y[1]=0;this.y[2]=0;this.y[3]=0;
 				break;
@@ -55,7 +53,6 @@ public class Rect {
 	}
 
 	public void draw(Graphics g,int pos_x,int pos_y){
-
 		for(int i=0;i<4;i++){
 			drawone(g,pos_x,pos_y,x[i],y[i]);
 		}
@@ -63,7 +60,6 @@ public class Rect {
 
 
 	public void drawone(Graphics g,int pos_x,int pos_y,int x,int y){
-
 			g.drawImage(RECT_IMG,
 					pos_x+x*RECTW , pos_y+y*RECTH, pos_x+(x+1)*RECTW , pos_y+(y+1)*RECTH,
 					color*RECTW, 0 , (color+1)*RECTW, RECTH, null);
@@ -72,25 +68,25 @@ public class Rect {
 
 	public void change(){
 			int tmpx=0;
-			if(color != 3 && tmpx!=-1)	// FIXME : 这里的-1注意一下
+			if(color != 3 && tmpx!=-1)
 				for(int i=0;i<4;i++){
 					tmpx=this.x[i];
 					this.x[i]=this.y[i]-this.y[0]+this.x[0];
 					this.y[i]=this.x[0]-tmpx+this.y[0];
-				}		
-		}	
-	
+				}
+		}
+
 	public void down() {
         for (int i = 0; i < 4; i++)
             this.y[i] = this.y[i] + 1;
 
     }
-	
+
 	public void left() {
 		for (int i = 0; i < 4; i++)
 			this.x[i] = (this.x[i] - 1 + 11) % 11;
 	}
-	
+
 	public void right() {
         for (int i = 0; i < 4; i++)
             this.x[i] = (this.x[i] + 1) % 11;
@@ -105,4 +101,14 @@ public class Rect {
 		for(int i=0;i<4;i++)
 			this.y[i] = this.y[i] - 1;
 	}
+
+	public RectMessage getRectMessage(){
+        return new RectMessage(x,y,color);
+	}
+
+    public void setRectMessage(RectMessage message){
+        this.x=message.getX();
+        this.y=message.getY();
+        this.color=message.getColor();
+    }
 }
