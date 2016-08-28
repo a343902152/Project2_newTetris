@@ -22,9 +22,8 @@ public class GameController {
 
 	public static GameController localController;
 
-	// 界面
 	private JPanel panel;
-	// 时间控制器，加载GameTask，每过一段时间，界面就变化一次
+
 	private Timer timer;
 
 	private boolean isRunning =false;

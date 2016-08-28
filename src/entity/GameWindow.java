@@ -71,6 +71,4 @@ public class GameWindow extends JLabel{
 		//сроб
 		g.drawImage(WINDOW_IMG, x+w-SIZE, y+h-SIZE, x+w, y+h, WINDOW_IMGW-SIZE, WINDOW_IMGH-SIZE, WINDOW_IMGW, WINDOW_IMGH, null);		
 	}
-	
-	
 }

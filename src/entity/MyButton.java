@@ -16,7 +16,7 @@ public class MyButton extends JButton{
 		this.height=height;
         // 设置按钮背景图
         ImageIcon icon1=new ImageIcon(url);
-        icon1.setImage(icon1.getImage().getScaledInstance((int)(width*0.9),(int)(height*0.9),Image.SCALE_DEFAULT)); 
+        icon1.setImage(icon1.getImage().getScaledInstance((int)(width*0.9),(int)(height*0.9),Image.SCALE_DEFAULT));
         setIcon(icon1);
         
         // 不绘制焦点
@@ -36,7 +36,8 @@ public class MyButton extends JButton{
 	}
 	public void setNewImage(String url){
 		ImageIcon icon1=new ImageIcon(url);
-        icon1.setImage(icon1.getImage().getScaledInstance((int)(width*0.9),(int)(height*0.9),Image.SCALE_DEFAULT)); 
+        icon1.setImage(icon1.getImage().
+                getScaledInstance((int)(width*0.9),(int)(height*0.9),Image.SCALE_DEFAULT));
         setIcon(icon1);
 	}
 	

@@ -12,7 +12,7 @@ import java.net.URL;
 public class HttpUtil {
 
 
-    public static String BASE_URL="http://localhost:8080/TetrisServer/";
+    public static String BASE_URL="http://caiji.site:8080/tetris/";
     public static void sendHttpRequest(final String address, final HttpCallbackListener listener) {
         new Thread(new Runnable() {
             @Override

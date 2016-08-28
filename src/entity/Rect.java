@@ -63,18 +63,17 @@ public class Rect {
 			g.drawImage(RECT_IMG,
 					pos_x+x*RECTW , pos_y+y*RECTH, pos_x+(x+1)*RECTW , pos_y+(y+1)*RECTH,
 					color*RECTW, 0 , (color+1)*RECTW, RECTH, null);
-
 	}
 
-	public void change(){
-			int tmpx=0;
-			if(color != 3 && tmpx!=-1)
-				for(int i=0;i<4;i++){
-					tmpx=this.x[i];
-					this.x[i]=this.y[i]-this.y[0]+this.x[0];
-					this.y[i]=this.x[0]-tmpx+this.y[0];
-				}
-		}
+	public void change() {
+		int tmpx = 0;
+		if (color != 3 && tmpx != -1)
+			for (int i = 0; i < 4; i++) {
+				tmpx = this.x[i];
+				this.x[i] = this.y[i] - this.y[0] + this.x[0];
+				this.y[i] = this.x[0] - tmpx + this.y[0];
+			}
+	}
 
 	public void down() {
         for (int i = 0; i < 4; i++)
